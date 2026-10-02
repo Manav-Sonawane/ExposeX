@@ -1,4 +1,5 @@
 import { test, before, after } from 'node:test';
+process.env.NODE_ENV = 'test';
 import assert from 'node:assert/strict';
 import { openDb } from '../src/db.js';
 import { createApp } from '../src/app.js';
@@ -151,4 +152,20 @@ test('export and import round-trip', async () => {
   assert.equal(imp.status, 200);
   const afterScore = (await call('/dashboard', { token: fresh })).body.overall.score;
   assert.ok(Math.abs(afterScore - before) <= 2, `${before} vs ${afterScore}`);
+});
+
+test('login is rate limited', async () => {
+  delete process.env.NODE_ENV;
+  const { createApp: create } = await import('../src/app.js');
+  const app = create(openDb(':memory:'), { secret: 's', clientDir: '/nonexistent' });
+  const srv = await new Promise((resolve) => {
+    const s = app.listen(0, () => resolve(s));
+  });
+  const url = `http://127.0.0.1:${srv.address().port}/api/auth/login`;
+  let last;
+  for (let i = 0; i < 31; i++)
+    last = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'x@y.io', password: 'nope' }) });
+  assert.equal(last.status, 429);
+  srv.close();
+  process.env.NODE_ENV = 'test';
 });

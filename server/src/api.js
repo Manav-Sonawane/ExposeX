@@ -137,6 +137,23 @@ function createUser(db, { email, name, password }) {
   return Number(r.lastInsertRowid);
 }
 
+/** Fixed-window in-memory limiter for credential endpoints. */
+function rateLimit({ windowMs, max }) {
+  const hits = new Map();
+  return (req, res, next) => {
+    const now = Date.now();
+    const key = req.ip;
+    const entry = hits.get(key);
+    if (!entry || now - entry.start > windowMs) hits.set(key, { start: now, count: 1 });
+    else if (++entry.count > max) {
+      res.setHeader('Retry-After', Math.ceil((entry.start + windowMs - now) / 1000));
+      return res.status(429).json({ error: 'Too many attempts. Please wait a few minutes and try again.' });
+    }
+    if (hits.size > 10_000) for (const [k, v] of hits) if (now - v.start > windowMs) hits.delete(k);
+    next();
+  };
+}
+
 // ---------- router ----------
 
 export function apiRouter(db, secret) {
@@ -152,6 +169,8 @@ export function apiRouter(db, secret) {
   };
 
   r.get('/health', (_req, res) => res.json({ ok: true }));
+  const limiter = process.env.NODE_ENV === 'test' ? (_q, _s, n) => n() : rateLimit({ windowMs: 10 * 60_000, max: 30 });
+  r.use(['/auth/login', '/auth/register', '/auth/demo'], limiter);
 
   r.get(
     '/meta',

@@ -53,7 +53,7 @@ Or skip sign-up: click **"Explore instantly with a demo footprint"** on the logi
 Tests:
 
 ```bash
-npm test             # 16 tests: risk engine properties + API integration
+npm test             # 17 tests: risk engine properties + API integration
 ```
 
 ### Configuration
