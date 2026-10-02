@@ -103,6 +103,7 @@ CREATE TABLE IF NOT EXISTS actions_log (
 CREATE TABLE IF NOT EXISTS dismissed_fixes (
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   fix_key TEXT NOT NULL,
+  title TEXT,
   PRIMARY KEY (user_id, fix_key)
 );
 

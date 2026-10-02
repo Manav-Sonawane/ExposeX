@@ -460,6 +460,7 @@ export function apiRouter(db, secret) {
           id: n.id,
           name: n.name,
           kind: n.kind,
+          serviceType: n.serviceType,
           risk: n.risk,
           level: n.level,
           P: n.P,
@@ -534,13 +535,13 @@ export function apiRouter(db, secret) {
   r.get(
     '/fixes',
     wrap((req) => {
-      const { fixes, risk, dismissed } = analyze(db, req.user.id);
+      const { fixes, risk } = analyze(db, req.user.id);
       return {
         fixes: fixes.map(({ mutation, ...f }) => ({ ...f, op: mutation.op })),
         score: risk.overall.score,
         scoreExact: risk.overall.scoreExact,
         completed: repo.listActions(db, req.user.id, 100),
-        dismissed: [...dismissed],
+        dismissed: db.prepare('SELECT fix_key AS key, title FROM dismissed_fixes WHERE user_id = ?').all(req.user.id).map((r) => ({ ...r })),
       };
     }),
   );
@@ -564,8 +565,8 @@ export function apiRouter(db, secret) {
   r.post(
     '/fixes/dismiss',
     wrap((req) => {
-      const { key } = parse(z.object({ key: z.string().min(1) }), req.body);
-      db.prepare('INSERT OR IGNORE INTO dismissed_fixes (user_id, fix_key) VALUES (?, ?)').run(req.user.id, key);
+      const { key, title } = parse(z.object({ key: z.string().min(1), title: z.string().max(300).optional() }), req.body);
+      db.prepare('INSERT OR IGNORE INTO dismissed_fixes (user_id, fix_key, title) VALUES (?, ?, ?)').run(req.user.id, key, title ?? null);
       changed(db, req.user.id);
       return { ok: true };
     }),

@@ -1,0 +1,97 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --color-ink-950: #070b14;
+  --color-ink-900: #0b1120;
+  --color-ink-850: #0f172a;
+  --color-ink-800: #141d33;
+  --color-ink-700: #1e293b;
+  --color-ink-600: #2a3650;
+  --color-ink-500: #475569;
+  --color-ink-400: #7c8aa5;
+  --color-ink-300: #a8b3c7;
+  --color-ink-200: #cbd5e1;
+  --color-ink-100: #e2e8f0;
+
+  --color-brand-300: #67e8f9;
+  --color-brand-400: #22d3ee;
+  --color-brand-500: #06b6d4;
+  --color-brand-600: #0891b2;
+
+  --color-risk-critical: #f43f5e;
+  --color-risk-high: #fb923c;
+  --color-risk-medium: #facc15;
+  --color-risk-low: #34d399;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-ink-950 text-ink-100 font-sans antialiased;
+}
+
+::selection {
+  background: rgb(34 211 238 / 0.3);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ink-600) transparent;
+}
+
+@utility card {
+    @apply rounded-2xl border border-ink-700/70 bg-ink-900/80 shadow-[0_1px_0_0_rgb(255_255_255/0.03)_inset];
+  }
+@utility card-pad {
+    @apply p-5;
+  }
+@utility btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition
+      disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400;
+  }
+@utility btn-primary {
+    @apply btn bg-brand-500 text-ink-950 hover:bg-brand-400;
+  }
+@utility btn-secondary {
+    @apply btn border border-ink-600 bg-ink-800 text-ink-100 hover:bg-ink-700;
+  }
+@utility btn-ghost {
+    @apply btn text-ink-300 hover:bg-ink-800 hover:text-ink-100;
+  }
+@utility btn-danger {
+    @apply btn bg-rose-500/15 text-rose-300 border border-rose-500/30 hover:bg-rose-500/25;
+  }
+@utility input {
+    @apply w-full rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-ink-100 placeholder:text-ink-500
+      focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-400/20;
+  }
+@utility label {
+    @apply mb-1.5 block text-xs font-medium uppercase tracking-wide text-ink-400;
+  }
+@utility chip {
+    @apply inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium;
+  }
+@utility section-title {
+    @apply text-sm font-semibold text-ink-200;
+  }
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
