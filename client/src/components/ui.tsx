@@ -134,7 +134,7 @@ export function ScoreGauge({ score, size = 200, label }: { score: number; size?:
   const r = (size - stroke) / 2;
   const c = Math.PI * r;
   const color = scoreColor(score);
-  const h = size / 2 + stroke;
+  const h = size / 2 + stroke + size * 0.06;
   return (
     <svg width={size} height={h} viewBox={`0 0 ${size} ${h}`} role="img" aria-label={`Privacy score ${score} out of 100`}>
       <path d={`M ${stroke / 2} ${size / 2} A ${r} ${r} 0 0 1 ${size - stroke / 2} ${size / 2}`} fill="none" stroke="var(--color-ink-700)" strokeWidth={stroke} strokeLinecap="round" />

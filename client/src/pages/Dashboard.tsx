@@ -170,7 +170,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="card card-pad flex flex-col items-center justify-center text-center">
           <p className="mb-3 self-start text-sm font-semibold text-ink-200">Overall privacy score</p>
           <ScoreGauge score={o.score} label={scoreLabel(o.score)} size={220} />
@@ -205,7 +205,7 @@ export default function Dashboard() {
               </span>
             )}
           </div>
-          <div className="h-56 min-h-0 flex-1">
+          <div className="h-56 lg:h-auto lg:min-h-56 lg:flex-1">
             <HistoryChart history={d.history} />
           </div>
           {d.recentActions.length > 0 && (
@@ -241,7 +241,7 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-3">
+      <div className="mt-4 grid gap-4 xl:grid-cols-3 [&>*]:min-w-0">
         <div className="card flex flex-col xl:col-span-2">
           <div className="flex items-center justify-between px-5 pt-5">
             <p className="section-title">Connection graph</p>
@@ -249,7 +249,7 @@ export default function Dashboard() {
               Open full exposure map →
             </Link>
           </div>
-          <div className="h-[380px]">
+          <div className="h-[380px] xl:h-auto xl:min-h-[380px] xl:flex-1">
             {graph.data ? (
               <ExposureGraph data={graph.data} compact onSelect={(id) => id && navigate(`/accounts/${id}`)} />
             ) : (
@@ -292,7 +292,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-2">
+      <div className="mt-4 grid gap-4 xl:grid-cols-2 [&>*]:min-w-0">
         <div className="card card-pad">
           <div className="flex items-center justify-between">
             <p className="section-title">Riskiest accounts</p>

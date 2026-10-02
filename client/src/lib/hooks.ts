@@ -37,7 +37,12 @@ export function useLiveEvents(enabled: boolean) {
     };
     es.addEventListener('footprint', onFootprint);
     es.addEventListener('notification', onNotification as EventListener);
-    return () => es.close();
+    const close = () => es.close();
+    window.addEventListener('pagehide', close);
+    return () => {
+      window.removeEventListener('pagehide', close);
+      close();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled]);
 }

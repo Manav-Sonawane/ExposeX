@@ -93,7 +93,7 @@ function candidates(fp, now) {
         effort: 1,
         accountId: a.id,
         title: upgrading
-          ? `Upgrade ${a.name} from ${TWOFA[a.twofa].label.toLowerCase()}s to an authenticator app`
+          ? `Upgrade ${a.name} from ${a.twofa === 'sms' ? 'SMS' : 'email'} codes to an authenticator app`
           : `Turn on two-factor authentication for ${a.name}`,
         detail: upgrading
           ? `${TWOFA[a.twofa].label}s can be intercepted (SIM swap, inbox takeover). An authenticator app or security key can't be.`
@@ -207,7 +207,7 @@ export function generateFixes(fp, { dismissed = new Set(), now = new Date() } = 
     const sim = computeRisk(applyMutation(cloneFootprint(fp), c.mutation), { blast: false, now, samples });
     const gain = sim.overall.scoreExact - base.overall.scoreExact;
     const reduction = base.overall.totalRisk > 0 ? (base.overall.totalRisk - sim.overall.totalRisk) / base.overall.totalRisk : 0;
-    if (gain <= 0.01 && reduction <= 0.001) continue;
+    if (gain < 0.05 && reduction < 0.002) continue;
     list.push({
       ...c,
       gain: Math.round(gain * 100) / 100,

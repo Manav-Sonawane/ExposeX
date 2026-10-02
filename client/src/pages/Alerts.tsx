@@ -93,7 +93,6 @@ function BreachPanel({ id }: { id: number }) {
                 <p className="mt-0.5 flex items-center gap-1 text-[11px] text-ink-400">
                   <ArrowRight className="size-3 shrink-0" style={{ color: LINK_COLORS[x.path[x.path.length - 1]?.type ?? 'linked'] }} />
                   {x.reason}
-                  {x.channel === 'both' && <span className="text-violet-300">(+ shared password)</span>}
                 </p>
               </li>
             ))}

@@ -174,11 +174,11 @@ export default function Inventory() {
         }
       />
 
-      <div className="grid gap-4 xl:grid-cols-[1fr_300px]">
+      <div className="grid gap-4 2xl:grid-cols-[1fr_300px] [&>*]:min-w-0">
         <div className="min-w-0">
           <div className="card mb-4 p-3">
             <div className="flex flex-wrap items-center gap-2">
-              <div className="relative min-w-52 flex-1">
+              <div className="relative min-w-0 flex-1 basis-52">
                 <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-ink-500" />
                 <input
                   className="input pl-9"
@@ -341,15 +341,15 @@ export default function Inventory() {
                           {a.kind === 'phone' ? (
                             <span className="text-xs text-ink-500">n/a</span>
                           ) : a.reused ? (
-                            <span className="chip border-violet-500/30 bg-violet-500/10 text-violet-300">
+                            <span className="chip border-violet-500/30 bg-violet-500/10 whitespace-nowrap text-violet-300">
                               <KeyRound className="size-3" /> Shared ×{a.passwordGroup!.size}
                             </span>
                           ) : (
                             <span className="text-xs text-ink-400">Unique</span>
                           )}
                         </td>
-                        <td className="px-3 py-2.5 text-xs">{a.blastCount > 0 ? <span className="font-semibold text-orange-300">{a.blastCount} accounts</span> : <span className="text-ink-500">none</span>}</td>
-                        <td className={clsx('px-3 py-2.5 text-xs', a.activity === 'dormant' ? 'text-yellow-200' : 'text-ink-300')}>{inactiveLabel(a.inactiveDays)}</td>
+                        <td className="px-3 py-2.5 text-xs">{a.blastCount > 0 ? <span className="font-semibold whitespace-nowrap text-orange-300">{a.blastCount} account{a.blastCount === 1 ? '' : 's'}</span> : <span className="text-ink-500">none</span>}</td>
+                        <td className={clsx('px-3 py-2.5 text-xs whitespace-nowrap', a.activity === 'dormant' ? 'text-yellow-200' : 'text-ink-300')}>{inactiveLabel(a.inactiveDays)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -358,7 +358,7 @@ export default function Inventory() {
             </div>
           )}
         </div>
-        <div className="space-y-4">
+        <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-1 2xl:content-start [&>*]:min-w-0">
           <GroupsPanel />
           <div className="card card-pad text-xs text-ink-400">
             <p className="section-title mb-2">How scoring works</p>
