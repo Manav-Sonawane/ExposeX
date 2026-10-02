@@ -1,0 +1,17 @@
+{
+  "name": "exposex-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node --disable-warning=ExperimentalWarning --watch src/index.js",
+    "start": "node --disable-warning=ExperimentalWarning src/index.js",
+    "test": "node --disable-warning=ExperimentalWarning --test \"test/**/*.test.js\"",
+    "seed": "node --disable-warning=ExperimentalWarning src/cli/seed.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "zod": "^3.25.76"
+  }
+}
