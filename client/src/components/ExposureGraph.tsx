@@ -126,7 +126,28 @@ export default function ExposureGraph({ data, selectedId, onSelect, simulation, 
     cy.on('mouseover', 'node', () => container.current && (container.current.style.cursor = 'pointer'));
     cy.on('mouseout', 'node', () => container.current && (container.current.style.cursor = 'default'));
     cyRef.current = cy;
-    return () => cy.destroy();
+    // A fresh instance has no elements yet (React StrictMode mounts twice in dev),
+    // so force the sync effect below to add them and run the layout.
+    signature.current = '';
+
+    // Keep the canvas sized to its container and re-fit when it changes.
+    let lastSize = '';
+    const ro = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      const size = `${Math.round(width)}x${Math.round(height)}`;
+      if (!width || !height || size === lastSize) return;
+      const first = lastSize === '' || lastSize.startsWith('0x') || lastSize.endsWith('x0');
+      lastSize = size;
+      cy.resize();
+      if (first || cy.elements().length) cy.fit(undefined, compact ? 16 : 40);
+    });
+    if (container.current) ro.observe(container.current);
+
+    return () => {
+      ro.disconnect();
+      cyRef.current = null;
+      cy.destroy();
+    };
   }, [compact]);
 
   // Sync elements; only re-run layout when the set of nodes/edges changes.
